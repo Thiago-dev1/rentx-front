@@ -21,16 +21,29 @@ interface CarsPros {
         car_id: string,
         specification_id: string,
         createdAt: Date
-    }
+    }[]
+}
+
+interface SpecificationsProps {
+    id: string,
+    name: string,
+    description: string,
+    createdAt: Date
 }
 
 function Cars() {
 
     const [cars, setCars] = useState<CarsPros[]>([])
+    const [specifications, setSpecifications] = useState<SpecificationsProps[]>([])
 
     useEffect(() => {
         api.get("cars/available")
-            .then(response => setCars(response.data)) 
+            .then(response => setCars(response.data))
+    }, [])
+
+    useEffect(() => {
+        api.get("specifications")
+            .then(response => setSpecifications(response.data))
     }, [])
 
     return (
@@ -44,24 +57,22 @@ function Cars() {
                         return (
                             <Link href={`/car/${car.license_plate}`} >
                                 <a key={car.id} className="flex flex-col bg-blue-600 w-[480px]">
-                            <div className="flex justify-between px-4">
-                                <div className="flex flex-col">
-                                    <div><h3 className="text-2xl font-semibold">{car.name}, {car.brand}</h3></div>
-                                    <div className="flex gap-2 text-sm">
-                                        <p>5 pessoas</p>
-                                        <p>1 Mala</p>
-                                        <p>Manual</p>
+                                    <div className="flex justify-between px-4">
+                                        <div className="flex flex-col">
+                                            <div><h3 className="text-2xl font-semibold">{car.name}, {car.brand}</h3></div>
+                                            <div className="flex gap-2 text-sm">
+                                                {car.SpecificationsCars.map(s => specifications.map(sn => sn.id === s.specification_id ? <p className='text-gray-300'>{sn.name}</p> : undefined))}
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div className="flex flex-col">
+                                                <span>Preço total por dia</span>
+                                                <p className="text-end font-semibold">{car.dailyRate}</p>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-    
-                                <div>
-                                    <div className="flex flex-col">
-                                        <span>Preço total por dia</span>
-                                        <p className="text-end font-semibold">{car.dailyRate}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+                                </a>
                             </Link>
                         )
                     })}
