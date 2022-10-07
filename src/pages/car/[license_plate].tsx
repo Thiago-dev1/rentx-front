@@ -20,7 +20,14 @@ interface CarsPros {
     car_id: string,
     specification_id: string,
     createdAt: Date
-  }
+  }[]
+}
+
+interface SpecificationsProps {
+  id: string,
+  name: string,
+  description: string,
+	createdAt: Date
 }
 
 const Post = () => {
@@ -28,11 +35,18 @@ const Post = () => {
   const { license_plate } = router.query
 
   const [cars, setCars] = useState<CarsPros[]>([])
+  const [specifications, setSpecifications] = useState<SpecificationsProps[]>([])
 
   useEffect(() => {
     api.get("cars/available", { params: { license_plate: license_plate } })
       .then(response => setCars(response.data))
   }, [])
+
+  useEffect(() => {
+    api.get("specifications")
+      .then(response => setSpecifications(response.data))
+  }, [])
+
 
   return (
     <div className="max-w-[1400px] mx-auto h-screen flex flex-col">
@@ -48,9 +62,12 @@ const Post = () => {
                   <div className="flex flex-col">
                     <div><h3 className="text-2xl font-semibold">{car.name}, {car.brand}</h3></div>
                     <div className="flex gap-2 text-sm">
-                      <p>5 pessoas</p>
-                      <p>1 Mala</p>
-                      <p>Manual</p>
+                      {car.SpecificationsCars.map(s => {
+                        return (
+                          <p>{s.specification_id}</p>
+                        )
+                      })}
+
                     </div>
                   </div>
 
