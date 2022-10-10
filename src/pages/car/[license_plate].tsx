@@ -30,9 +30,10 @@ interface SpecificationsProps {
   createdAt: Date
 }
 
-const Post = () => {
+const Car = () => {
   const router = useRouter()
   const { license_plate } = router.query
+
 
   const [cars, setCars] = useState<CarsPros[]>([])
   const [specifications, setSpecifications] = useState<SpecificationsProps[]>([])
@@ -40,14 +41,13 @@ const Post = () => {
   useEffect(() => {
     api.get("cars/available", { params: { license_plate: license_plate } })
       .then(response => setCars(response.data))
-  }, [])
+  }, [license_plate !== undefined])
 
   useEffect(() => {
     api.get("specifications")
       .then(response => setSpecifications(response.data))
   }, [])
 
-  console.log(cars.map(car => car.SpecificationsCars.map(s => specifications.map(sn => sn.id === s.specification_id ? sn.name : undefined))))
 
 
   return (
@@ -58,12 +58,12 @@ const Post = () => {
         <main className="pl-5 flex flex-col gap-4">
           {cars.map(car => {
             return (
-              <a href='#' className="flex flex-col justify-center bg-blue-600 w-[680px] h-36">
+              <a href='#' key={car.id} className="flex flex-col justify-center bg-blue-600 w-[680px] h-36">
                 <div className="flex justify-between px-4">
                   <div className="flex flex-col">
                     <div><h3 className="text-2xl font-semibold">{car.name}, {car.brand}</h3></div>
                     <div className="flex gap-2 text-sm">
-                      {car.SpecificationsCars.map(s => specifications.map(sn => sn.id === s.specification_id ? <p className='text-gray-300'>{sn.name}</p> : undefined))}
+                      {car.SpecificationsCars.map(s => specifications.map(sn => sn.id === s.specification_id ? <p key={sn.id} className='text-gray-300'>{sn.name}</p> : undefined))}
                     </div>
                   </div>
 
@@ -86,4 +86,4 @@ const Post = () => {
   )
 }
 
-export default Post
+export default Car

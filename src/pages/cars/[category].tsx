@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useEffect, useState } from "react"
 import Link from 'next/link'
 
@@ -31,15 +32,17 @@ interface SpecificationsProps {
     createdAt: Date
 }
 
-function Cars() {
+function CarsCategory() {
+    const router = useRouter()
+    const { category } = router.query
 
     const [cars, setCars] = useState<CarsPros[]>([])
     const [specifications, setSpecifications] = useState<SpecificationsProps[]>([])
 
     useEffect(() => {
-        api.get("cars/available")
+        api.get("cars/available", {params: {category_id: category}})
             .then(response => setCars(response.data))
-    }, [])
+    }, [category !== undefined])
 
     useEffect(() => {
         api.get("specifications")
@@ -82,4 +85,4 @@ function Cars() {
     )
 }
 
-export default Cars
+export default CarsCategory
