@@ -5,46 +5,18 @@ import Header from "../../components/Header"
 import Sidebar from "../../components/Sidebar"
 import { api } from "../../service/api"
 
-interface CarsPros {
-    id: string,
-    name: string,
-    description: string,
-    dailyRate: number,
-    available: boolean
-    license_plate: string,
-    fine_amount: number,
-    brand: string,
-    category_id: string,
-    createdAt: Date,
-    SpecificationsCars: {
-        id: string,
-        car_id: string,
-        specification_id: string,
-        createdAt: Date
-    }[]
-}
+import { CarsPros } from "../../types/CarsProps"
 
-interface SpecificationsProps {
-    id: string,
-    name: string,
-    description: string,
-    createdAt: Date
-}
 
 function Cars() {
 
     const [cars, setCars] = useState<CarsPros[]>([])
-    const [specifications, setSpecifications] = useState<SpecificationsProps[]>([])
 
     useEffect(() => {
         api.get("cars/available")
             .then(response => setCars(response.data))
     }, [])
 
-    useEffect(() => {
-        api.get("specifications")
-            .then(response => setSpecifications(response.data))
-    }, [])
 
     return (
         <div className="max-w-[1400px] mx-auto h-screen flex flex-col">
@@ -61,7 +33,7 @@ function Cars() {
                                         <div className="flex flex-col">
                                             <div><h3 className="text-2xl font-semibold">{car.name}, {car.brand}</h3></div>
                                             <div className="flex gap-2 text-sm">
-                                                {car.SpecificationsCars.map(s => specifications.map(sn => sn.id === s.specification_id ? <p key={sn.id} className='text-gray-300'>{sn.name}</p> : undefined))}
+                                                <p className='text-gray-300'>{car.SpecificationsCars.map(s => s.Specification.name)}</p>
                                             </div>
                                         </div>
 
