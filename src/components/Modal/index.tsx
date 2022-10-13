@@ -38,8 +38,8 @@ function Modal({car_id, name, brand, dailyRate, fine_amount}: ModalProps) {
                     .catch((err) => {
                         if (err.response.data.message === "Car is unavailable") {
                             return alert("O carro está indisponível!")
-                        } else if(err.response.data.message === "Alugeu em andamento!") {
-                            return alert("There's a rental in progress for user!")
+                        } else if(err.response.data.message === "There's a rental in progress for user!") {
+                            return alert("Alugeu em andamento!")
                         } else if (err.response.data.message === "Invalid return time!") {
                             return alert("Horário de retorno inválido!")
                         }

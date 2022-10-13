@@ -28,6 +28,7 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function signOut() {
     destroyCookie(undefined, "login.token")
+    destroyCookie(undefined, "login.refresh-token")
 
     Router.push("/")
 }
@@ -39,10 +40,9 @@ export function AuthProvaider({children}: AuthProviderProps) {
 
     useEffect(() => {
         const { 'login.token': token } = parseCookies()
+         const { 'login.refresh-token': refresh_token } = parseCookies()
 
-        console.log(token)
-
-        if (token) {
+        if (refresh_token) {
             api.get('/me').then(response => {
                 const { email, name } = response.data
                 setUser({ email, name }) 
@@ -61,11 +61,16 @@ export function AuthProvaider({children}: AuthProviderProps) {
                 password
             })
 
-            const { token } = response.data
+            const { token, refresh_token } = response.data
             const { name } = response.data.user
 
 
             setCookie(undefined, 'login.token', token, {
+                maxAge: 60 * 60 * 24 * 30,
+                path: '/'
+            })
+
+            setCookie(undefined, 'login.refresh-token', refresh_token, {
                 maxAge: 60 * 60 * 24 * 30,
                 path: '/'
             })
