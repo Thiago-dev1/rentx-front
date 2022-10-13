@@ -1,6 +1,8 @@
 import { useContext, useState } from "react"
 import { AuthContext, signOut } from "../../context/AuthContext"
 
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+
 function Header() {
     const [open, setOpen] = useState<boolean>(false)
 
@@ -13,15 +15,18 @@ function Header() {
 
             <p>Rentx</p>
             <div>
-                <div ><button type="button" onClick={open === false? () => setOpen(true): () => setOpen(false)}><p>{user?.name}</p></button>
-                    <div className={`absolute flex flex-col   ${open === false ? "invisible": ''}`}>
-                        <a href="#" className=" rounded-md px-3 py-2 text-base font-medium text-white hover:bg-gray-700 ">Your Profile</a>
-
-                        <a href="#" className=" rounded-md px-3 py-2 text-base font-medium text-white hover:bg-gray-700 ">Settings</a>
-
+                <DropdownMenu.Root>
+                    <DropdownMenu.Trigger>
+                        {user?.name}
+                    </DropdownMenu.Trigger>
+                    <DropdownMenu.Content className="bg-red-500 w-14">
+                        <DropdownMenu.Item>
                         <a onClick={signOut} href="#" className=" rounded-md px-3 py-2 text-base font-medium text-white hover:bg-gray-700 ">Sair</a>
-                </div>     
-                </div>
+                        </DropdownMenu.Item>
+                    </DropdownMenu.Content>
+                </DropdownMenu.Root>
+
+                
 
             </div>
         </header>
