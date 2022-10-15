@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import Header from "../../components/Header"
 import Sidebar from "../../components/Sidebar"
-import { api } from "../../service/api"
+import { api } from "../../service/apiClient"
 
 import { CarsPros } from "../../types/CarsProps"
 

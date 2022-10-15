@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Yup from 'yup'
 import { useFormik } from 'formik';
-import { api } from '../../service/api';
+import { api } from '../../service/apiClient';
 import Router from 'next/router';
 
 
@@ -14,33 +14,31 @@ interface ModalProps {
 }
 
 function Modal({car_id, name, brand, dailyRate, fine_amount}: ModalProps) {
-
     const formik = useFormik({
         initialValues: {
-            expected: ''
+            expected: '',
         },
         onSubmit: async (values) => {
             const data = {
                 car_id,
                 expected_return_date: new Date(values.expected)
             }
-
-            console.log(values.expected)
-
             try {
                 api.post("rentals", data)
                     .then(response => {
+                        console.log(response)
+                        console.log(response.status)
                         if (response.status === 201) {
                             alert("Sucesso")
                             Router.push("/dashboard")
                         }
-                    })
-                    .catch((err) => {
-                        if (err.response.data.message === "Car is unavailable") {
+                    }).catch((err) => {
+                        console.log(err)
+                        if (err.response?.data.message === "Car is unavailable") {
                             return alert("O carro está indisponível!")
-                        } else if(err.response.data.message === "There's a rental in progress for user!") {
+                        } else if(err.response?.data.message === "There's a rental in progress for user!") {
                             return alert("Alugeu em andamento!")
-                        } else if (err.response.data.message === "Invalid return time!") {
+                        } else if (err.response?.data.message === "Invalid return time!") {
                             return alert("Horário de retorno inválido!")
                         }
                         return alert("Erro interno do servidor")

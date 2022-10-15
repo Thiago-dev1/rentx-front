@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import Header from '../../components/Header'
 import Sidebar from '../../components/Sidebar'
-import { api } from '../../service/api'
+import { api } from '../../service/apiClient'
 
 import { CarsPros } from "../../types/CarsProps"
 

@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import Router from 'next/router';
 import * as Yup from 'yup'
-import { api } from '../service/api';
+import { api } from '../service/apiClient';
 
 function SignUp() {
 
